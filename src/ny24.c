@@ -1,3 +1,5 @@
+#define _POSIX_C_SOURCE 200809L
+
 #include <stdio.h>
 #include <stdint.h>
 #include <time.h>
@@ -10,8 +12,6 @@
 #define WIDTH 40
 #define HEIGHT 20
 #define CLEAR "\033[H\033[J"
-
-#define _POSIX_C_SOURCE 200809L
 
 // Glyphs from Konserif 30
 // See also: https://github.com/megakite/kons
