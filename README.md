@@ -1,5 +1,7 @@
 # ny24-anim
 
+<img align="center" alt="gif" src="./res/_2024.gif" />
+
 Animation for celebrating the coming of 2024, presented by a simple animation library.
 
 ## Usage
