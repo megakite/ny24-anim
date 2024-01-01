@@ -1,4 +1,4 @@
-CFLAGS	= -Iinclude -std=c11 -w 
+CFLAGS	= -Iinclude -std=c11 -Wall -Wextra -Wpedantic -Wshadow -Wconversion 
 LDFLAGS = -lm
 
 ifeq ($(DEBUG), 1)
