@@ -52,7 +52,7 @@ static void SHADOW(char data[], const unsigned width, const unsigned height)
 }
 
 // Global variables
-_Atomic(int) g_year, g_hour, g_min, g_sec;
+_Atomic(int) g_hour, g_min, g_sec, g_elapsed_ms;
 
 void *timer(void *data)
 {
@@ -64,12 +64,13 @@ void *timer(void *data)
 		now = time(NULL);
 		tm_now = localtime(&now);
 
-		g_year = tm_now->tm_year;
 		g_hour = tm_now->tm_hour;
 		g_min = tm_now->tm_min;
 		g_sec = tm_now->tm_sec;
 
-		if (tm_now->tm_year == 124 && tm_now->tm_sec == 2)
+		++g_elapsed_ms;
+
+		if (g_elapsed_ms == 5000)
 			break;
 
 		nanosleep(&ONE_MS, NULL);
@@ -98,26 +99,22 @@ void *player(void *data)
 	struct animation_t *expand_13 = make_animation(13, 0, 13, interp_linear);
 	struct animation_t *trans_exit = make_animation(15, 0, -20, interp_cubic);
 	struct animation_t *trans_enter = make_animation(15, 20, 0, interp_cubic);
+	animate(quote, W, expand_5);
+	animate(digit_2, W, expand_13);
+	animate(digit_3, W, expand_13);
 
-	int frame = 0;
 	bool played = false;
 	while (true) {
 		printf(CLEAR "=== %02d:%02d:%02d\n\n", g_hour, g_min, g_sec);
 
-		if (frame == 0) {
-			animate(quote, W, expand_5);
-			animate(digit_2, W, expand_13);
-			animate(digit_3, W, expand_13);
-		}
-
-		if (!played && g_year == 124) {
+		if (!played && g_elapsed_ms > 2000) {
 			animate(digit_3, Y, trans_exit);
 			animate(digit_4, Y, trans_enter);
 
 			played = true;
 		}
 
-		if (g_sec == 2)
+		if (g_elapsed_ms == 5000)
 			break;
 
 		tick_canvas(canvas);
@@ -125,7 +122,6 @@ void *player(void *data)
 		print_canvas(canvas);
 
 		fflush(stdout);
-		++frame;
 		nanosleep(&ONE_FRAME, NULL);
 	}
 
